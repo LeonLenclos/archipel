@@ -55,6 +55,15 @@ class Song {
     }
 
     this.melodie = this.melodie_1.concat(this.melodie_2);
+    this.melodie_note = []
+    for (var i = 0; i < this.melodie.length; i++) {
+      if (this.melodie[i]){
+        this.melodie_note[i] = this.gamme[this.melodie[i]]
+      }
+      else {
+        this.melodie_note[i] = null;
+      }
+    }
 
     // ACCORDS
     this.motif_chords = [1,,,,1/3,,,,2/3,,,,1/3,,,1/6,];
@@ -73,11 +82,12 @@ class Song {
       }
     }
 
+
 //Sequence qui combine notes de la mélodie et accords
   this.sequence = [];
   for (var i = 0; i < this.melodie.length; i++) {
     this.sequence[i] = {
-      note:this.gamme[this.melodie[i]],
+      note:this.melodie_note[i],
       voice: this.chords[i],
     }
   }
@@ -103,7 +113,7 @@ class Song {
       this.seq.start();
       Tone.Transport.start();
     }
-    
+
     stop(){
       if(this.seq){
         this.seq.stop();
