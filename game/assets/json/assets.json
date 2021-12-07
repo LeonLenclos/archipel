@@ -1,0 +1,14 @@
+{
+  "json": [
+    "txt",
+    "deco",
+    "lang",
+    "inventory"
+  ],
+  "png": [
+    "landform",
+    "poi",
+    "deco",
+    "player"
+  ]
+}

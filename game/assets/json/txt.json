@@ -1,0 +1,15 @@
+{
+    "misc":{
+        "ok":"Ok.",
+        "infos":"<p>Infos.....</p>"
+    },
+    "status":{
+        "turn": "Tour"
+    },
+    "startmenu":{
+        "title": "Archipel",
+        "txt": "infiniment cool !",
+        "play": "Jouer !",
+        "devmode": "Dev mode"
+    }
+}
