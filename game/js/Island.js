@@ -74,8 +74,8 @@ class Island {
         this.pois.push(poi);
       };
       new_poi('boat');
-      new_poi('pnj');
-      new_poi('pnj');
+      let n_png = Math.floor(this.pot.gnorm(-1,7));
+      for (var i = 0; i < n_png; i++) new_poi('pnj');
 
 
       // RARITIES

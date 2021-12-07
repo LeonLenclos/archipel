@@ -7,7 +7,7 @@ const TILE_SIZE = 16;
 const SCALE = 3;
 
 // SEED
-const WORLD_SEED = 2708944822
+const WORLD_SEED = 2708944866
 
 // PATH
 const JSON_PATH = '../game/assets/json/%(name)s.json'
