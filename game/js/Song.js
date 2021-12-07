@@ -6,7 +6,6 @@ class Song {
     }
     generate(){
 
-      this.tempo = this.pot.irange(60,160);
       //Sélection de la fondamentale
       this.fondamentale = Tonal.Scale.get('c4 chromatic').notes;
       this.fondamentale = this.fondamentale.concat(Tonal.Scale.get('c5 chromatic').notes);
