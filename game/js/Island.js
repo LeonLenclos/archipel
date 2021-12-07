@@ -52,7 +52,7 @@ class Island {
 
       // NAME
       // let markov_name = new Markov(2,20,["abatrup", "abacrop", "crupotrap of the crap"]);
-      this.name = this.lang.generate_word('land')
+      this.name = title(this.lang.generate_word('land'));
 
       // CONNECTIONS
       this.connections = [1]
@@ -92,6 +92,9 @@ class Island {
       hsl.hue = this.pot.f48();
       hsl.saturation = this.pot.gnorm(0, 1.0);
       hsl.lightness = this.pot.gnorm(.3, .8);
+
+      // FLAG
+      let flag = this.pot.irange(1,11);
 
       // SIZE
       let size = Math.floor(this.pot.gnorm(8,40)/2)*2;
@@ -202,6 +205,7 @@ class Island {
 
       this._map_data = {
         size:size,
+        flag:flag,
         landform:landform,
         main_island:main_island,
         pois:this.pois,

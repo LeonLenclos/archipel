@@ -11,7 +11,18 @@ class PopUp {
 
       this.element.empty();
       options.forEach(option => {
+
         let button = new Button(option.txt, option.callback, option.disabled);
+        if(type == 'boat'){
+          button.element.empty();
+          button.element.addClass('connection')
+          let flag = new FlagCanvas(option.flag, option.hsl);
+          flag.draw();
+          let name = $('<div/>');
+          name.text(option.txt);
+          flag.element.appendTo(button.element);
+          name.appendTo(button.element);
+        }
         button.element.appendTo(this.element)
         this.buttons.push(button);
       });
