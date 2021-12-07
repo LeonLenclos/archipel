@@ -19,8 +19,18 @@ const foreach_array2d = (arr, func) => arr.forEach((a, x)=>a.forEach((v, y) => f
 const constrain = (v, min, max) => Math.max(Math.min(v, max), min);
 const map_value = (v, start1, stop1, start2, stop2) => (v - start1) / (stop1 - start1) * (stop2 - start2) + start2;
 
+// Text
+const capitalize = (phrase)=>phrase.replace(/^\w/, c => c.toUpperCase());
+const title = (phrase)=>phrase.replace(/\b\w/g, c => c.toUpperCase());
+
 // Geometry
 const pos_is_in_rect = (x, y, width, height) => x >= 0 && x < width && y >= 0 && y < height
+const pos_in_tileset = (w, i, tw, th) => {
+  return {
+    x:(i%(w/tw))*tw,
+    y:~~(i/(w/tw))*(th||tw)
+  };
+};
 const pos_to_index = (x, y, width) => y*width+x;
 const calculate_max_scale = (w, h, maxw, maxh) => Math.max(1, Math.min(~~(maxw/w), ~~(maxh/h)));
 const pos_to_direction = (x, y, width, height) => {

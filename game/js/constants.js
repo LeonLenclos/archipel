@@ -4,6 +4,7 @@ const TURN_PER_SEC = 6;
 
 // SIZE
 const TILE_SIZE = 16;
+const SCALE = 3;
 
 // SEED
 const WORLD_SEED = 2708944822

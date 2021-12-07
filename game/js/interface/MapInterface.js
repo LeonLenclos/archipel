@@ -10,7 +10,9 @@ class MapInterface extends Interface {
     }
 
     create_content(){
+
         this.map_canvas.element.appendTo(this.container);
+        this.map_canvas.fit_to_screen();
         this.map_canvas.element.mousemove((e)=>{
             // let rect = this.map_canvas.element.getBoundingClientRect();
             this.mouse_x=e.clientX - this.map_canvas.element.offset().left;
@@ -31,7 +33,11 @@ class MapInterface extends Interface {
           let pos = this.map_canvas.tile_at(x, y)
           game.set_player_target(pos.x, pos.y)
         }
-        this.map_canvas.render();
+        this.map_canvas.draw();
+    }
+
+    on_resize(){
+      this.map_canvas.fit_to_screen();
     }
 
     on_ok(){
@@ -60,11 +66,10 @@ class MapInterface extends Interface {
 }
 
 
-class MapCanvas {
+class MapCanvas extends Canvas {
 
     constructor(){
-        this.element = $('<canvas>', {id:'map_canvas'});
-        this.ctx = this.element[0].getContext("2d");
+      super({id:'map_canvas'})
     }
 
     tile_at(x, y){
@@ -73,27 +78,11 @@ class MapCanvas {
         y:Math.floor((y*this.height-this.offset_y)/TILE_SIZE)//-this.offset_y)
       }
     }
-    render(){
-        let scale = 3
 
-        this.width = Math.floor(window.innerWidth/scale);
-        this.height = Math.floor(window.innerHeight/scale);
-        this.offset_x = Math.floor(this.width/2 - game.player.x*TILE_SIZE);
-        this.offset_y = Math.floor(this.height/2 - game.player.y*TILE_SIZE);
-
-        this.ctx.canvas.width = this.width*scale;
-        this.ctx.canvas.height = this.height*scale;
-
-        this.clear_bg(this.ctx);
-        let map_data = game.get_map_data()
-        this.render_landform(this.ctx, map_data.landform);
-        this.render_decoration(this.ctx, map_data.decoration);
-        // this.render_free_for_deco(this.ctx, map_data.free_for_deco);
-        this.render_pois(this.ctx, map_data.pois);
-        this.render_player(this.ctx, game.player);
-        this.filters(this.ctx, map_data.hsl);
-        this.ctx.canvas.style.transformOrigin = '0 0'; //scale from top left
-        this.ctx.canvas.style.transform = 'scale('+scale+')';
+    fit_to_screen(){
+      let w = Math.floor(window.innerWidth/SCALE);
+      let h = Math.floor(window.innerHeight/SCALE);
+      this.resize(w, h);
     }
 
     clear_bg(ctx){
@@ -103,6 +92,18 @@ class MapCanvas {
           }
       }
     }
+    render(ctx){
+        this.clear_bg(ctx);
+        this.offset_x = Math.floor(this.width/2 - game.player.x*TILE_SIZE);
+        this.offset_y = Math.floor(this.height/2 - game.player.y*TILE_SIZE);
+        let map_data = game.get_map_data()
+        this.set_hsl(map_data.hsl);
+        this.render_landform(ctx, map_data.landform);
+        this.render_decoration(ctx, map_data.decoration);
+        this.render_pois(ctx, map_data.pois);
+        this.render_player(ctx, game.player);
+    }
+
 
     render_landform(ctx, landform){
       const is_ground = (x,y) => landform[constrain(x, 0, landform.length-1)][constrain(y, 0, landform[0].length-1)]
@@ -159,8 +160,7 @@ class MapCanvas {
 
     render_tile(tileset, tile_idx, x, y, ctx, ignore_offset){
       let img = assets.png[tileset]
-      let sx = ((tile_idx) % (img.width/TILE_SIZE)) * TILE_SIZE;
-      let sy = ~~((tile_idx) / (img.width/TILE_SIZE)) * TILE_SIZE;
+      let spos = pos_in_tileset(img.width, tile_idx, TILE_SIZE);
 
       let dx = x*TILE_SIZE;
       let dy = y*TILE_SIZE;
@@ -169,17 +169,6 @@ class MapCanvas {
         dx += this.offset_x;
         dy += this.offset_y;
       }
-      ctx.drawImage(img, sx, sy, TILE_SIZE, TILE_SIZE, dx, dy, TILE_SIZE, TILE_SIZE);
+      ctx.drawImage(img, spos.x, spos.y, TILE_SIZE, TILE_SIZE, dx, dy, TILE_SIZE, TILE_SIZE);
     }
-
-    filters(ctx, hsl){
-      let img = ctx.getImageData(0,0,this.width,this.height);
-      let hue = map_value(hsl.hue, 0,1,-180,180);
-      let saturation = map_value(hsl.saturation, 0,1,-100,100);
-      let lightness = map_value(hsl.lightness, 0,1,-100,100);
-      img = ImageFilters.HSLAdjustment (img, hue, saturation, lightness);
-      // img = ImageFilters.Oil (img, 2, 100)
-      ctx.putImageData(img, 0, 0);
-    }
-
 }

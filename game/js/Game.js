@@ -83,6 +83,7 @@ class Game {
     this.get_player_island().song.stop();
 
     let island = this.world.get_island(index);
+    island.visited = true;
     this.player.island_index = index;
     this.player.x = island.map_data.size/2
     this.player.y = island.map_data.size/2
@@ -102,7 +103,7 @@ class Game {
     foreach_array2d(island.map_data.main_island, (v, x, y)=>{
       grid.setWalkableAt(x, y, island.is_walkable(x, y));
     });
-    let finder = new PF.BestFirstFinder();
+    let finder = new PF.AStarFinder();
     let p = this.player;
     p.path = finder.findPath(p.x, p.y, x, y, grid);
     p.path.shift();
@@ -112,17 +113,21 @@ class Game {
     if(!auto) this.player.path = [];
     if (this.world.player_can_move(this.player, x, y)){
       this.player.move(x, y);
-      this.player.interacting = false;
-      this.get_player_island().pois.forEach(poi=>poi.interacting=false);
+      this.close_interaction();
       let poi = this.world.player_meet_poi(this.player);
       if(poi) this.interact(poi);
     }
   }
 
+  close_interaction(){
+    this.player.interacting = false;
+    this.get_player_island().pois.forEach(poi=>poi.interacting=false);
+    this.interfaces.map.interaction_popup.close();
+  }
+
   interact(poi){
     this.player.interacting = true;
     poi.interacting = true;
-    let popup = this.interfaces.map.interaction_popup
     let options = []
     switch (poi.type) {
       case 'boat':
@@ -133,9 +138,11 @@ class Game {
         return {
           index:index,
           txt:island.name,
+          flag:island.visited?island.map_data.flag:0,
+          hsl:island.map_data.hsl,
           callback:()=>{
             this.go_to_island(index);
-            popup.close();
+            this.close_interaction();
           }
         };
       });
@@ -146,6 +153,6 @@ class Game {
       default:
 
     }
-    popup.open(poi.type, options);
+    this.interfaces.map.interaction_popup.open(poi.type, options);
   }
 }
