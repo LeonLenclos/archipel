@@ -99,12 +99,15 @@ class Game {
 
   set_player_target(x, y){
     let island = this.get_player_island()
+    let p = this.player;
+    if(p.path.length>0 && p.path[p.path.length-1][0]==x && p.path[p.path.length-1][1]==y){
+      return;
+    }
     let grid = new PF.Grid(island.map_data.size, island.map_data.size);
     foreach_array2d(island.map_data.main_island, (v, x, y)=>{
       grid.setWalkableAt(x, y, island.is_walkable(x, y));
     });
     let finder = new PF.AStarFinder();
-    let p = this.player;
     p.path = finder.findPath(p.x, p.y, x, y, grid);
     p.path.shift();
   }
@@ -131,27 +134,29 @@ class Game {
     let options = []
     switch (poi.type) {
       case 'boat':
-      let connections = this.get_player_island().get_all_connections(this.world);
-      options = connections.map((connection)=>{
-        let index = this.player.island_index + connection;
-        let island = this.world.get_island(index);
-        return {
-          index:index,
-          txt:island.name,
-          flag:island.visited?island.map_data.flag:0,
-          hsl:island.map_data.hsl,
-          callback:()=>{
-            this.go_to_island(index);
-            this.close_interaction();
-          }
-        };
-      });
-      break;
+        let connections = this.get_player_island().get_all_connections(this.world);
+        options = connections.map((connection)=>{
+          let index = this.player.island_index + connection;
+          let island = this.world.get_island(index);
+          return {
+            index:index,
+            txt:island.name,
+            flag:island.visited?island.map_data.flag:0,
+            hsl:island.map_data.hsl,
+            callback:()=>{
+              this.go_to_island(index);
+              this.close_interaction();
+            }
+          };
+        });
+        break;
       case 'pnj':
-      options = []
+        options = {
+          txt:this.get_player_island().lang.talk(50,100),
+          face:poi.face,
+          hsl:this.get_map_data().hsl,
+        };
       break;
-      default:
-
     }
     this.interfaces.map.interaction_popup.open(poi.type, options);
   }

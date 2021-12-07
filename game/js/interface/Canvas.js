@@ -8,9 +8,8 @@ class Canvas {
     resize(w, h){
       this.width = w;
       this.height = h;
-      this.ctx.canvas.width = this.width*SCALE;
-      this.ctx.canvas.height = this.height*SCALE;
-
+      this.ctx.canvas.width = this.width//*SCALE;
+      this.ctx.canvas.height = this.height//*SCALE;
     }
 
 
@@ -21,11 +20,9 @@ class Canvas {
     draw(){
         this.render && this.render(this.ctx);
         this.filters(this.ctx);
-        this.ctx.canvas.style.transformOrigin = '0 0'; //SCALE from top left
-        this.ctx.canvas.style.transform = sprintf('scale(%(scale)s)', {scale:SCALE});
+        // this.ctx.canvas.style.transformOrigin = '0 0'; //SCALE from top left
+        // this.ctx.canvas.style.transform = sprintf('scale(%(scale)s)', {scale:SCALE});
     }
-
-
 
 
     filters(ctx){
@@ -50,7 +47,22 @@ class FlagCanvas extends Canvas {
   render(ctx){
     let img = assets.png.flag;
     let spos = pos_in_tileset(img.width, this.motif, this.width, this.height);
-    console.log(img, this.motif, spos)
     ctx.drawImage(img, spos.x, spos.y, this.width, this.height, 0, 0, this.width, this.height);
+  }
+}
+
+class FaceCanvas extends Canvas {
+  constructor(face, hsl){
+    super();
+    this.face=face
+    this.resize(TILE_SIZE, TILE_SIZE);
+    this.set_hsl(hsl)
+  }
+
+  render(ctx){
+    let img = assets.png.face;
+    this.face.forEach((value, i) => {
+      ctx.drawImage(img, value*TILE_SIZE, i*TILE_SIZE, TILE_SIZE, TILE_SIZE, 0, 0, TILE_SIZE, TILE_SIZE);
+    });
   }
 }

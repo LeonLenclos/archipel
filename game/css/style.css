@@ -25,6 +25,8 @@ canvas {
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 }
+
+
 #game{
   width: 100%;
   height: 100%;
@@ -41,6 +43,15 @@ canvas {
   left: 50%;
 }
 
+/* DIALOG */
+.dialog{
+  display: flex;
+  
+}
+.dialog canvas {
+    width:48px;
+  height: 48px;
+}
 /* BUTTONS */
 
 .button.connection {
@@ -49,9 +60,15 @@ canvas {
   height:64px;
   padding: 8px;
 }
+
 .button.connection div{
   font-size: 24px;
   width: 100%;
+}
+
+.button.connection canvas{
+  width: 80px;
+  height: 48px;
 }
 
 .button {
@@ -106,8 +123,9 @@ canvas {
 }
 
 #map_canvas {
-  width: 100%;
-  height: 100%;
+    transform-origin: 0 0;
+  transform: scale(3);
+
 }
 
 

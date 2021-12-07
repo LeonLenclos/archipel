@@ -90,8 +90,8 @@ class Island {
       // HSL
       let hsl = {};
       hsl.hue = this.pot.f48();
-      hsl.saturation = this.pot.gnorm(0, 1.0);
-      hsl.lightness = this.pot.gnorm(.3, .8);
+      hsl.saturation = this.pot.gnorm(0, .5);
+      hsl.lightness = this.pot.gnorm(.5, .6);
 
       // FLAG
       let flag = this.pot.irange(1,11);
@@ -175,11 +175,10 @@ class Island {
 
       // PLACE DECORATION
       let decoration_map = new_array2d(size, size);
-      let decoration_density = this.pot.f48();
-
+      let decoration_density = this.pot.gnorm(0,1.5);
       while(decoration_density > 0.05){
         let element = this.pot.mixof(assets.json.deco)[0];
-        let element_density = this.pot.range(0, decoration_density);
+        let element_density = this.pot.gnorm(0, decoration_density);
         let element_seed = this.pot.ui32();
         let element_count = 0;
         noise.seed(element_seed);
@@ -190,7 +189,7 @@ class Island {
             let ry = y/size;
             let decorate = 0
             decorate += noise_octave(rx, ry, 8, 0.7)
-            decorate += noise_octave(rx, ry, 2, 0.3)
+            decorate += noise_octave(rx, ry, 2, 0.4)
             if(decorate > 1-element_density){
               element_count++;
               let variation = Math.floor(this.pot.ngrad(0,9));

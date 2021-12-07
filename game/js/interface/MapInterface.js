@@ -28,8 +28,8 @@ class MapInterface extends Interface {
 
     update_content(){
         if(!this.interaction_popup.is_open && this.mouse_is_down){
-          let x = this.mouse_x/this.map_canvas.ctx.canvas.clientWidth
-          let y = this.mouse_y/this.map_canvas.ctx.canvas.clientHeight
+          let x = this.mouse_x/window.innerWidth
+          let y = this.mouse_y/window.innerHeight
           let pos = this.map_canvas.tile_at(x, y)
           game.set_player_target(pos.x, pos.y)
         }
