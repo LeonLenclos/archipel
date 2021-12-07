@@ -20,7 +20,7 @@ class Song {
     this.gamme = this.gamme_oct_inf.concat(this.gamme.concat(this.gamme_oct_sup));
 
     // Motif de la mélodie
-    let motifs = [1, 1/3, 2/3, 1/3, 2/3, 1/3, 2/3, 1/3];
+    let motifs = [1, 1/3, 2/3, 1/3, 4/5, 1/3, 2/3, 1/3];
     // Initialisation de la mélodie à la fondamentale
     this.motif = [true];
     this.melodie_1 = [7];
@@ -102,9 +102,9 @@ class Song {
     const synth_chords = new Tone.PolySynth().connect(vol);
     //
     this.seq = new Tone.Sequence((time, step) => {
-      if (step.note != 0){
+      if (step.note != null){
         synth.triggerAttackRelease(step.note, '4n', time);
-        if (step.voice != 0)
+        if (step.voice != null)
           {synth_chords.triggerAttackRelease(step.voice, '2n', time);}
 
       }
