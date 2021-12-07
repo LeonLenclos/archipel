@@ -44,6 +44,16 @@ class Game {
     if(this.pressed[0]){
       this.get_interface().input(this.pressed[0]);
     }
+
+    if (this.player && this.player.path.length>0) {
+      this.request_turn(()=>{
+        if (this.player && this.player.path.length>0) {
+          let step = this.player.path.shift();
+          this.move_player(step[0]-this.player.x, step[1]-this.player.y, true);
+        }
+      })
+    }
+
     //update interface
     this.get_interface().update();
   }
@@ -65,7 +75,6 @@ class Game {
     // init and start a new game
     this.world = new World(WORLD_SEED);
     this.player = new Player();
-    this.turn = 0;
     this.go_to_island(0);
     this.open('map');
   }
@@ -87,10 +96,21 @@ class Game {
     this.get_interface().create();
   }
 
-  move_player(x, y) {
-    this.player.direction = move_to_direction(x, y);
-    if (this.world.walkable(this.player, x, y)){
-      this.turn ++;
+  set_player_target(x, y){
+    let island = this.get_player_island()
+    let grid = new PF.Grid(island.map_data.size, island.map_data.size);
+    foreach_array2d(island.map_data.main_island, (v, x, y)=>{
+      grid.setWalkableAt(x, y, island.is_walkable(x, y));
+    });
+    let finder = new PF.BestFirstFinder();
+    let p = this.player;
+    p.path = finder.findPath(p.x, p.y, x, y, grid);
+    p.path.shift();
+  }
+
+  move_player(x, y, auto) {
+    if(!auto) this.player.path = [];
+    if (this.world.player_can_move(this.player, x, y)){
       this.player.move(x, y);
       this.player.interacting = false;
       this.get_player_island().pois.forEach(poi=>poi.interacting=false);

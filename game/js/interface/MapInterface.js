@@ -26,7 +26,10 @@ class MapInterface extends Interface {
 
     update_content(){
         if(!this.interaction_popup.is_open && this.mouse_is_down){
-            this.input(pos_to_direction(this.mouse_x, this.mouse_y, this.map_canvas.ctx.canvas.clientWidth, this.map_canvas.ctx.canvas.clientHeight));
+          let x = this.mouse_x/this.map_canvas.ctx.canvas.clientWidth
+          let y = this.mouse_y/this.map_canvas.ctx.canvas.clientHeight
+          let pos = this.map_canvas.tile_at(x, y)
+          game.set_player_target(pos.x, pos.y)
         }
         this.map_canvas.render();
     }
@@ -64,6 +67,12 @@ class MapCanvas {
         this.ctx = this.element[0].getContext("2d");
     }
 
+    tile_at(x, y){
+      return{
+        x:Math.floor((x*this.width-this.offset_x)/TILE_SIZE),//-this.offset_x),
+        y:Math.floor((y*this.height-this.offset_y)/TILE_SIZE)//-this.offset_y)
+      }
+    }
     render(){
         let scale = 3
 
@@ -134,9 +143,13 @@ class MapCanvas {
     }
 
     render_player(ctx, player){
-        if (!player.interacting){
-          this.render_tile('player', 0, player.x, player.y, ctx);
-        }
+      if (!player.interacting){
+        this.render_tile('player', 0, player.x, player.y, ctx);
+      }
+      if (player.path.length>0){
+        let last_step = player.path[player.path.length-1]
+        this.render_tile('player', 1, last_step[0], last_step[1], ctx);
+      }
     }
 
     render_tile_rect(x, y, ctx){

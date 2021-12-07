@@ -30,13 +30,11 @@ class World {
       return island.get_poi_at(player.x, player.y);
     }
 
-    walkable(player, x, y){
-      let map_data = this.get_island(player.island_index).map_data;
+    player_can_move(player, x, y){
+      let island = this.get_island(player.island_index);
       let target_x = player.x + x;
       let target_y = player.y + y;
-      let is_walkable = map_data.landform[target_x][target_y];
-      is_walkable = is_walkable && !map_data.decoration[target_x][target_y];
-      return is_walkable;
+      return island.is_walkable(target_x, target_y);
     }
 
 }

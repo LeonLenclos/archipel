@@ -14,12 +14,30 @@ class Island {
       return this._map_data;
     }
 
+    get_all_connections(world){
+      let all_connections = this.connections.slice()
+      // for (var i = his.index; i >= this.index-MAX_DISTANCE_CONNECTION; i--) {
+      for (var i = 1; i <= MAX_DISTANCE_CONNECTION; i++) {
+        let previous_island = world.get_island(this.index-i)
+        if(previous_island && previous_island.connections.includes(i)){
+          all_connections.push(-i)
+        }
+      }
+      return all_connections;
+    }
+
     get_poi_by_type(type){
         return this.pois.filter((poi)=>poi.type==type);
     }
 
     get_poi_at(x, y){
         return this.pois.filter((poi)=>poi.x==x&&poi.y==y)[0];
+    }
+
+    is_walkable(x, y){
+      return this.map_data.landform[x]
+          && this.map_data.landform[x][y]
+          && !this.map_data.decoration[x][y];
     }
 
     generate_identity(){
@@ -196,16 +214,5 @@ class Island {
 
 
 
-    get_all_connections(world){
-      let all_connections = this.connections.slice()
-      // for (var i = his.index; i >= this.index-MAX_DISTANCE_CONNECTION; i--) {
-      for (var i = 1; i <= MAX_DISTANCE_CONNECTION; i++) {
-        let previous_island = world.get_island(this.index-i)
-        if(previous_island && previous_island.connections.includes(i)){
-          all_connections.push(-i)
-        }
-      }
-      return all_connections;
-    }
 
 }
