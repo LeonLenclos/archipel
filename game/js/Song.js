@@ -90,6 +90,7 @@ class Song {
     // Melody
     let melody_A = this.generate_melody(pattern, 0, 20);
     let melody_B = this.generate_melody(pattern, -7, 14);
+    let melody_C = this.generate_melody(pattern, -7, 14);
 
     // CHORDS
     let chords_pattern_probabilities_A = [1,,,,1/3,,,,];
@@ -100,8 +101,29 @@ class Song {
     let chords_B = this.generate_chords(chords_pattern_B, melody_B);
 
     // Sequence qui combine notes de la mélodie et accords
-    this.melody = [].concat(melody_A, melody_B)
-    this.chords = [].concat(chords_A, chords_B);
+    this.melody = [].concat(
+      melody_A,
+      melody_B,
+      melody_A,
+      melody_B,
+
+      melody_A,
+      melody_C,
+      melody_A,
+      melody_C,
+    );
+
+    this.chords = [].concat(
+      chords_A,
+      chords_B,
+      chords_A,
+      chords_B,
+
+      chords_A,
+      chords_B,
+      chords_A,
+      chords_B,
+    );
 
     let notes = this.melody.map((index)=>this.note_index_to_note(index))
 
