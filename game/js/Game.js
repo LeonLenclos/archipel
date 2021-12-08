@@ -7,6 +7,9 @@ class Game {
     };
     this.element = $('#game');
 
+    // Music
+    Tone.Transport.start();
+    
     // Handle keys
     this.pressed = [];
     $(document).keydown((e)=>{this.onkey(e)});
