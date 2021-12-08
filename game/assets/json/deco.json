@@ -1,8 +1,26 @@
 [
-  {"line":0},
-  {"line":1},
-  {"line":2},
-  {"line":3},
-  {"line":4},
-  {"line":5}
+  {
+    "line":0,
+    "type":"house"
+  },
+  {
+    "line":1,
+    "type":"house"
+  },
+  {
+    "line":2,
+    "type":"rock"
+  },
+  {
+    "line":3,
+    "type":"hole"
+  },
+  {
+    "line":4,
+    "type":"tree"
+  },
+  {
+    "line":5,
+    "type":"tree"
+  }
 ]

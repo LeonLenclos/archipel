@@ -24,6 +24,7 @@ const capitalize = (phrase)=>phrase.replace(/^\w/, c => c.toUpperCase());
 const title = (phrase)=>phrase.replace(/\b\w/g, c => c.toUpperCase());
 
 // Geometry
+const distance_squared = (x, y)=> (2*x-1)**2 + (2*y-1)**2
 const pos_is_in_rect = (x, y, width, height) => x >= 0 && x < width && y >= 0 && y < height
 const pos_in_tileset = (w, i, tw, th) => {
   return {
@@ -36,22 +37,22 @@ const calculate_max_scale = (w, h, maxw, maxh) => Math.max(1, Math.min(~~(maxw/w
 const pos_to_direction = (x, y, width, height) => {
     let diag1 = (x) => x*(height/width);
     let diag2 = (x) => -x*(height/width)+height;
-    if(y>=diag1(x) && y>=diag2(x)) return 'down';
-    if(y>=diag1(x) && y<=diag2(x)) return 'left';
-    if(y<=diag1(x) && y<=diag2(x)) return 'up';
-    if(y<=diag1(x) && y>=diag2(x)) return 'right';
+    if(y>=diag1(x) && y>=diag2(x)) return 'south';
+    if(y>=diag1(x) && y<=diag2(x)) return 'west';
+    if(y<=diag1(x) && y<=diag2(x)) return 'north';
+    if(y<=diag1(x) && y>=diag2(x)) return 'east';
 };
 const move_to_direction = (x, y) => {
-    if(x==0 && y>0)  return 'down';
-    if(x<0  && y==0) return 'left';
-    if(x==0 && y<0)  return 'up';
-    if(x>0  && y==0) return 'right';
+    if(x==0 && y>0)  return 'south';
+    if(x<0  && y==0) return 'west';
+    if(x==0 && y<0)  return 'north';
+    if(x>0  && y==0) return 'east';
 };
 const direction_to_move = (dir) => {
-    if(dir == 'down')  return  {x:0,  y:1};
-    if(dir == 'left')  return  {x:-1, y:0};
-    if(dir == 'up')    return  {x:0,  y:-1};
-    if(dir == 'right') return  {x:1,  y:0};
+    if(dir == 'south')  return  {x:0,  y:1};
+    if(dir == 'west')  return  {x:-1, y:0};
+    if(dir == 'north')    return  {x:0,  y:-1};
+    if(dir == 'east') return  {x:1,  y:0};
 };
 
 // other

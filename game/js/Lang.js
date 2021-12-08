@@ -12,6 +12,13 @@ class Lang {
           min_phonemes:this.pot.irange(1,2),
           max_phonemes:this.pot.irange(4,7)
         }
+        this.proper_nouns = new Set();
+    }
+
+    generate_proper_noun(seed){
+      let proper_noun = title(this.generate_word(seed));
+      this.proper_nouns.add(proper_noun);
+      return proper_noun;
     }
 
     generate_word(seed){
@@ -35,6 +42,20 @@ class Lang {
       return phonemes.join('');
     }
 
+    translate(sentence){
+      let sep = /([ .:;?!~,`"&|()<>{}\[\]\r\n/\\]+)/
+      let splited = sentence.split(sep);
+
+      let translated = splited.map((token)=>{
+          if(this.proper_nouns.has(token)) return token;
+          if(token.match(sep)) return token;
+          if(token.length <= 0) return token;
+          return this.generate_word(token);
+      })
+
+      return translated.join('');
+    }
+
     generate_phrase(seed, max_length){
       let pot = Fdrandom.pot(seed);
       let punctuation = pot.mixof(assets.json.lang.punctuation)[0];
@@ -53,7 +74,7 @@ class Lang {
       let pot = Fdrandom.pot(seed);
       let speach = ""
       while(true) {
-        let phrase_length = pot.gnorm(10,100);
+        let phrase_length = pot.gnorm(10, Math.min(100,max_length));
         let phrase = this.generate_phrase(pot.random(), phrase_length);
         if(phrase.length+speach.length > max_length){
           break;

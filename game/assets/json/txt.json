@@ -1,15 +1,119 @@
 {
-    "misc":{
-        "ok":"Ok.",
-        "infos":"<p>Infos.....</p>"
+  "misc":{
+    "ok":"Ok.",
+    "infos":"<p>Infos.....</p>"
+  },
+  "status":{
+    "turn": "Tour"
+  },
+  "startmenu":{
+    "title": "Archipel",
+    "txt": "infiniment cool !",
+    "play": "Jouer !",
+    "devmode": "Dev mode"
+  },
+  "gui":{
+    "pearls_count":{
+      "en":["Collected pearls: %(pearls)s<br/>Remaining pearls: infinity"],
+      "fr":["Perles collectées : %(pearls)s<br/>Perles restantes : une infinité"]
     },
-    "status":{
-        "turn": "Tour"
-    },
-    "startmenu":{
-        "title": "Archipel",
-        "txt": "infiniment cool !",
-        "play": "Jouer !",
-        "devmode": "Dev mode"
+    "pearl_count":{
+      "en":["Collected pearl: %(pearls)s<br/>Remaining pearls: infinity"],
+      "fr":["Perle collectée : %(pearls)s<br/>Perles restantes : une infinité"]
     }
+  },
+  "button":{
+    "cancel":{
+      "en":["Cancel"],
+      "fr":["Annuler"]
+    },
+    "ok":{
+      "en":["Ok"],
+      "fr":["Dac"]
+    },
+    "take_pearl":{
+      "en":["Take the pearl"],
+      "fr":["Prendre la perle"]
+    },
+    "leave_pearl":{
+      "en":["Leave the pearl on the ground"],
+      "fr":["Laisser la perle par terre"]
+    }
+  },
+  "cardinal":{
+    "north" : {
+      "en":["north"],
+      "fr":["nord"]
+    },
+    "south" : {
+      "en":["south"],
+      "fr":["sud"]
+    },
+    "east" : {
+      "en":["east"],
+      "fr":["est"]
+    },
+    "west" : {
+      "en":["west"],
+      "fr":["ouest"]
+    },
+    "center" : {
+      "en":["center"],
+      "fr":["centre"]
+    }
+  },
+  "deco":{
+    "house" : {
+      "en":["a house"],
+      "fr":["une maison"]
+    },
+    "tree" : {
+      "en":["a tree"],
+      "fr":["un arbre"]
+    },
+    "rock" : {
+      "en":["a rock"],
+      "fr":["un rocher"]
+    },
+    "hole" : {
+      "en":["a hole"],
+      "fr":["un trou"]
+    }
+  },
+  "pnj":{
+    "casual":{
+      "en":["Hello, how are you today?"],
+      "fr":["Salut, comment ça va aujourd'hui ?"]
+    },
+    "clue":{
+      "near_this":{
+        "en":["There is a pearl right there, next to me."],
+        "fr":["Il y a une perle juste là, à côté de moi."]
+      },
+      "pnj_has_clue":{
+        "en":["%(detail)s found a pearl."],
+        "fr":["%(detail)s a trouvé une perle."]
+      },
+      "near_pnj":{
+        "en":["The pearl is next to %(detail)s."],
+        "fr":["La perle est à côté de %(detail)s."]
+      },
+      "near_boat":{
+        "en":["The pearl is next to the boat."],
+        "fr":["La perle est à côté du bateau."]
+      },
+      "near_water":{
+        "en":["The pearl is at the water's edge."],
+        "fr":["La perle est au bord de l'eau."]
+      },
+      "near_deco":{
+        "en":["The pearl is next to %(detail)s."],
+        "fr":["La perle est à côté d'%(detail)s."]
+      },
+      "cardinal_direction":{
+        "en":["The pearl is in the %(detail)s of the island."],
+        "fr":["La perle est au %(detail)s de l'île."]
+      }
+    }
+  }
 }

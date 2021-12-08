@@ -52,7 +52,7 @@ class Island {
 
       // NAME
       // let markov_name = new Markov(2,20,["abatrup", "abacrop", "crupotrap of the crap"]);
-      this.name = title(this.lang.generate_word('land'));
+      this.name = this.lang.generate_proper_noun(this.seed);
 
       // CONNECTIONS
       this.connections = [1]
@@ -72,10 +72,16 @@ class Island {
         let seed = this.pot.ui32();
         let poi = new POI(type, seed);
         this.pois.push(poi);
+        return poi;
       };
       new_poi('boat');
+      new_poi('pearl');
       let n_png = Math.floor(this.pot.gnorm(-1,7));
-      for (var i = 0; i < n_png; i++) new_poi('pnj');
+      for (var i = 0; i < n_png; i++) {
+        let pnj = new_poi('pnj');
+        pnj.name = this.lang.generate_proper_noun(pnj.seed);
+
+      };
 
 
       // RARITIES
@@ -106,7 +112,6 @@ class Island {
       let weights = [this.pot.f48(),this.pot.f48(),this.pot.f48()]
       let weights_sum = weights[0]+weights[1]+weights[2]
 
-      const distance_squared = (x, y)=> (2*x-1)**2 + (2*y-1)**2
 
       map_array2d(landform, (v, x, y)=>{
         let rx = x/size;
@@ -143,6 +148,7 @@ class Island {
         boat_x += 1;
       }
       this.get_poi_by_type('boat')[0].set_pos(boat_x, boat_y);
+
       // PLACE POIS
       this.pois.filter(poi=>poi.type!='boat').forEach(poi => {
         let places = [];
@@ -193,14 +199,16 @@ class Island {
             if(decorate > 1-element_density){
               element_count++;
               let variation = Math.floor(this.pot.ngrad(0,9));
-              return {line:element.line, variation:variation};
+              return {
+                line:element.line,
+                type:element.type,
+                variation:variation
+              };
             }
             return v;
           }
         });
-
       }
-
 
       this._map_data = {
         size:size,
@@ -211,8 +219,11 @@ class Island {
         decoration:decoration_map,
         free_for_deco:free_for_deco,
         hsl:hsl,
-
       };
+
+      // CLUES
+      this.get_poi_by_type('pnj').forEach((pnj)=>pnj.generate_clue(this));
+
     }
 
 

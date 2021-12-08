@@ -1,6 +1,7 @@
 * {
   font-family: sans-serif;
   font-weight: bold;
+  color:#444;
 
   box-sizing: border-box;
 }
@@ -16,7 +17,6 @@ html, body {
 
 
 body {
-  color: white;
   background: black;
 }
 
@@ -43,28 +43,47 @@ canvas {
   left: 50%;
 }
 
-.dialog, .button {
+.dialog .pnj,
+.dialog .txt,
+.button,
+#island_name,
+#pearls_count{
   background: none;
   border:15px solid transparent;
   border-image: url("/game/assets/png/border.png") 15 fill repeat;
-  color:#444;
+  margin:  5px;
 
 }
 
 /* DIALOG */
 .dialog{
   display: flex;
+  flex-direction: column;
   align-items: center;
-  
+    text-align: center;
+
 }
+
 .dialog canvas {
   width:48px;
   height: 48px;
 }
+.dialog .txt{
+    font-style: italic;
+  display: flex;
+  flex-direction: column;
+}
+.dialog .txt *:after,
+.dialog .txt *:before{
+  content:'"';
+}
 
-.dialog div {
-   text-align: left;
-  margin: 0 15px;
+.dialog .trad {
+  border-top:1px solid;
+  margin-top:10px;
+  padding-top: 5px;
+  font-size: smaller;
+  
 }
 /* BUTTONS */
 
@@ -80,25 +99,20 @@ canvas {
   width: 100%;
 }
 
-.button.connection canvas{
-  width: 80px;
-  height: 48px;
-}
 
 .button {
   height:45px;
   width:300px;
-  margin:  8px;
 }
 
 .button.selected,
 .button:hover{
-  width:350px;
+  width:320px;
 }
 
 
 .button:disabled, .button:disabled:hover, .button.selected:disabled {
-  color: gray;
+  color:#777;
   text-decoration-line: 3px;
   text-decoration: line-through ;
 }
@@ -110,6 +124,13 @@ canvas {
   justify-content: center;
   flex-direction: column;
 }
+/*** FLAG ****/
+.button.connection canvas,
+#island_name canvas{
+  width: 80px;
+  height: 48px;
+}
+
 
 /********** POPUP **********/
 
@@ -140,7 +161,29 @@ canvas {
 
 
 
+#island_name{
+    margin: 10px;
 
+  position: absolute;
+  top:0;
+  left:0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#island_name canvas {
+  margin-bottom: 5px;
+}
+
+
+#pearls_count{
+    font-size: smaller;
+  margin: 10px;
+  position: absolute;
+  bottom:0;
+  right:0;
+}
 
 
 /************* DEV ************/

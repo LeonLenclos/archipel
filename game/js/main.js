@@ -14,3 +14,4 @@ $(()=>{
 // DEV CHEAT CODE
 
 const next = ()=>game.go_to_island(game.player.island_index+1);
+const island = ()=>game.get_player_island();

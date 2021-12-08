@@ -1,19 +1,24 @@
 class Game {
   constructor(){
+    // Random
+    this.pot = Fdrandom.pot()
+
     // Interface
+    this.lang = 'fr'
     this.interfaces = {
       'start' : new StartInterface(),
       'map' : new MapInterface(),
     };
     this.element = $('#game');
 
+
     // Music
     Tone.Transport.start();
-    
+
     // Handle keys
     this.pressed = [];
-    $(document).keydown((e)=>{this.onkey(e)});
-    $(document).keyup((e)=>{this.onkey(e, true)});
+    // $(document).keydown((e)=>{this.onkey(e)});
+    // $(document).keyup((e)=>{this.onkey(e, true)});
 
     // Start
     this.open('start');
@@ -61,6 +66,14 @@ class Game {
     this.get_interface().update();
   }
 
+  t(){
+      let args = Array.prototype.slice.call(arguments);
+      let choices = args.reduce((p,c)=>{
+        return p[c]
+      }, assets.json.txt);
+      return this.pot.mixof(choices[this.lang])[0]
+  }
+
   get_interface(){
     return this.interfaces[this.active_interface];
   }
@@ -86,7 +99,7 @@ class Game {
     this.get_player_island().song.stop();
 
     let island = this.world.get_island(index);
-    island.visited = true;
+    this.player.visited_islands.add(index);
     this.player.island_index = index;
     this.player.x = island.map_data.size/2
     this.player.y = island.map_data.size/2
@@ -103,9 +116,9 @@ class Game {
   set_player_target(x, y){
     let island = this.get_player_island()
     let p = this.player;
-    if(p.path.length>0 && p.path[p.path.length-1][0]==x && p.path[p.path.length-1][1]==y){
-      return;
-    }
+    // if(p.path.length>0 && p.path[p.path.length-1][0]==x && p.path[p.path.length-1][1]==y){
+    //   return;
+    // }
     let grid = new PF.Grid(island.map_data.size, island.map_data.size);
     foreach_array2d(island.map_data.main_island, (v, x, y)=>{
       grid.setWalkableAt(x, y, island.is_walkable(x, y));
@@ -121,7 +134,14 @@ class Game {
       this.player.move(x, y);
       this.close_interaction();
       let poi = this.world.player_meet_poi(this.player);
-      if(poi) this.interact(poi);
+
+      if(poi){
+        if(poi.type=='pearl'&&this.player.pearls_found.has(this.player.island_index)){
+          return;
+        } else{
+          this.interact(poi);
+        }
+      }
     }
   }
 
@@ -144,7 +164,7 @@ class Game {
           return {
             index:index,
             txt:island.name,
-            flag:island.visited?island.map_data.flag:0,
+            flag:this.player.visited_islands.has(index)?island.map_data.flag:0,
             hsl:island.map_data.hsl,
             callback:()=>{
               this.go_to_island(index);
@@ -153,13 +173,33 @@ class Game {
           };
         });
         break;
-      case 'pnj':
-        options = {
-          txt:this.get_player_island().lang.talk(50,100),
-          face:poi.face,
-          hsl:this.get_map_data().hsl,
-        };
-      break;
+
+        case 'pnj':
+          let trad = '';
+          if (this.player.pearls_found.has(this.player.island_index)) {
+            trad = this.t('pnj','casual');
+          } else {
+            trad = poi.clue.trad;
+          }
+          options = {
+            trad:trad,
+            txt:this.get_player_island().lang.translate(trad),
+            name:poi.name,
+            face:poi.face,
+            hsl:this.get_map_data().hsl,
+          };
+        break;
+
+        case 'pearl':
+
+          options = {
+            callback:()=>{
+              this.player.pearls_found.add(this.player.island_index);
+              this.close_interaction();
+            },
+            hsl:this.get_map_data().hsl,
+          };
+        break;
     }
     this.interfaces.map.interaction_popup.open(poi.type, options);
   }
