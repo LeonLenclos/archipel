@@ -1,13 +1,15 @@
+const OFFLINE = false;
+
 // TIME
 const TICK_PER_SEC = 60;
-const TURN_PER_SEC = 6;
+const TURN_PER_SEC = 4;
 
 // SIZE
 const TILE_SIZE = 16;
 const SCALE = 3;
 
 // SEED
-const WORLD_SEED = 2708944866
+const WORLD_SEED = 1111111111
 
 // PATH
 const JSON_PATH = '../game/assets/json/%(name)s.json'

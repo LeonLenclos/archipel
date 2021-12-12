@@ -4,66 +4,45 @@ class Game {
     this.pot = Fdrandom.pot()
 
     // Interface
-    this.lang = 'fr'
+    this.lang = 'en'
     this.interfaces = {
       'start' : new StartInterface(),
+      'intro' : new IntroInterface(),
       'map' : new MapInterface(),
     };
     this.element = $('#game');
-
-
-    // Music
-    Tone.Transport.start();
-
-    // Handle keys
-    this.pressed = [];
-    // $(document).keydown((e)=>{this.onkey(e)});
-    // $(document).keyup((e)=>{this.onkey(e, true)});
-
     // Start
     this.open('start');
-    setInterval(()=>this.update(), 1000/TICK_PER_SEC);
-  }
 
-
-  onkey(ev, keyup) {
-    if (ev.key in KEYS) {
-      if(keyup) this.pressed = this.pressed.filter(k=>k!=KEYS[ev.key]);
-      else if(!this.pressed.includes(KEYS[ev.key])){
-        this.pressed.unshift(KEYS[ev.key]);
-      }
-      ev.preventDefault();
-    }
-  }
-
-  request_turn(callback){
-    // if busy return false, else return true and get busy for some ms
-    if(this.busy) return false;
-    this.busy = true;
-    setTimeout(()=>{
-      this.busy=false;
-      callback && callback();
-    }, 1000/TURN_PER_SEC);
-    return true;
-  }
-
-  update() {
-    //input
-    if(this.pressed[0]){
-      this.get_interface().input(this.pressed[0]);
-    }
-
-    if (this.player && this.player.path.length>0) {
-      this.request_turn(()=>{
-        if (this.player && this.player.path.length>0) {
-          let step = this.player.path.shift();
-          this.move_player(step[0]-this.player.x, step[1]-this.player.y, true);
+    this.turn_countdown = 0.0
+    this.last_timestamp = 0;
+    const main_loop = (timestamp)=>{
+        if (this.last_timestamp) {
+          this.update(timestamp-this.last_timestamp);
         }
-      })
+        this.last_timestamp = timestamp
+        window.requestAnimationFrame(main_loop)
     }
+    this.last_time = 0
+    main_loop();
+  }
 
-    //update interface
-    this.get_interface().update();
+
+  start(lang){
+    this.lang = lang;
+    // Music
+    if(!OFFLINE) Tone.Transport.start();
+    this.open('intro');
+  }
+  turn_update(dt){
+    this.turn_countdown = 1000/TURN_PER_SEC
+    this.player && this.player.turn_update();
+  }
+
+  update(dt) {
+    this.turn_countdown -= dt;
+    if(this.turn_countdown <= 0) this.turn_update(-this.turn_countdown);
+    this.get_interface().update(dt);
   }
 
   t(){
@@ -74,17 +53,21 @@ class Game {
       return this.pot.mixof(choices[this.lang])[0]
   }
 
+  get_song(){
+    let island = this.get_player_island();
+    if(island && !OFFLINE) return island.song
+  }
+
   get_interface(){
     return this.interfaces[this.active_interface];
   }
 
   get_map_data(){
-    let island = this.get_player_island();
-    return island.map_data;
+    return this.get_player_island().map_data;
   }
 
   get_player_island() {
-    return this.world.get_island(this.player.island_index);
+    if(this.world) return this.world.get_island(this.player.island_index);
   }
 
   new_game(){
@@ -96,16 +79,15 @@ class Game {
   }
 
   go_to_island(index) {
-    this.get_player_island().song.stop();
-
+    this.get_song() && this.get_song().stop('@1m');
     let island = this.world.get_island(index);
     this.player.visited_islands.add(index);
     this.player.island_index = index;
     this.player.x = island.map_data.size/2
     this.player.y = island.map_data.size/2
     this.move_player(0,0);
+    this.get_song() && this.get_song().start('@1m');
 
-    island.song.play();
   }
 
   open(interface_id){
@@ -129,7 +111,7 @@ class Game {
   }
 
   move_player(x, y, auto) {
-    if(!auto) this.player.path = [];
+    // if(!auto) this.player.path = [];
     if (this.world.player_can_move(this.player, x, y)){
       this.player.move(x, y);
       this.close_interaction();
@@ -164,8 +146,10 @@ class Game {
           return {
             index:index,
             txt:island.name,
-            flag:this.player.visited_islands.has(index)?island.map_data.flag:0,
+            flag:island.map_data.flag,
             hsl:island.map_data.hsl,
+            visited:this.player.visited_islands.has(index),
+            pearl_found:this.player.pearls_found.has(index),
             callback:()=>{
               this.go_to_island(index);
               this.close_interaction();

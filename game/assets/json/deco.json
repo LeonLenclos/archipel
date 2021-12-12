@@ -9,7 +9,7 @@
   },
   {
     "line":2,
-    "type":"rock"
+    "type":"house"
   },
   {
     "line":3,
@@ -17,10 +17,18 @@
   },
   {
     "line":4,
-    "type":"tree"
+    "type":"rock"
   },
   {
     "line":5,
+    "type":"tree"
+  },
+  {
+    "line":6,
+    "type":"tree"
+  },
+  {
+    "line":7,
     "type":"tree"
   }
 ]

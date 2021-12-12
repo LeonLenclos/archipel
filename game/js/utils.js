@@ -18,7 +18,7 @@ const foreach_array2d = (arr, func) => arr.forEach((a, x)=>a.forEach((v, y) => f
 // Numbers
 const constrain = (v, min, max) => Math.max(Math.min(v, max), min);
 const map_value = (v, start1, stop1, start2, stop2) => (v - start1) / (stop1 - start1) * (stop2 - start2) + start2;
-
+const lerp = (start, stop, amt) => amt * (stop-start) + start;
 // Text
 const capitalize = (phrase)=>phrase.replace(/^\w/, c => c.toUpperCase());
 const title = (phrase)=>phrase.replace(/\b\w/g, c => c.toUpperCase());

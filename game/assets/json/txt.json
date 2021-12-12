@@ -1,17 +1,14 @@
 {
-  "misc":{
-    "ok":"Ok.",
-    "infos":"<p>Infos.....</p>"
-  },
-  "status":{
-    "turn": "Tour"
-  },
-  "startmenu":{
-    "title": "Archipel",
-    "txt": "infiniment cool !",
-    "play": "Jouer !",
-    "devmode": "Dev mode"
-  },
+  "language":[
+    {
+      "lang":"fr",
+      "txt":"Français"
+    },
+    {
+      "lang":"en",
+      "txt":"English"
+    }
+  ],
   "gui":{
     "pearls_count":{
       "en":["Collected pearls: %(pearls)s<br/>Remaining pearls: infinity"],
@@ -20,16 +17,54 @@
     "pearl_count":{
       "en":["Collected pearl: %(pearls)s<br/>Remaining pearls: infinity"],
       "fr":["Perle collectée : %(pearls)s<br/>Perles restantes : une infinité"]
+    },
+    "visited":{
+      "en":["Visited island"],
+      "fr":["Île visitée"]
+    },
+    "not_visited":{
+      "en":["Unknow island"],
+      "fr":["Île inconnue"]
+    },
+    "pearl_found":{
+      "en":["Pearl found"],
+      "fr":["Perle trouvée"]
+    },
+    "pearl_not_found":{
+      "en":["Pearl not found"],
+      "fr":["Perle non trouvée"]
     }
   },
+  "intro":[
+    {
+      "en":["Your world has an infinite number of islands. An infinite world in the image of Aleph, the goddess who created it. Aleph, infinite goddess with infinite power, goddess of the infinity and creator of the world."],
+      "fr":["Ton monde a un nombre infini d'îles. Un monde infini à l'image d'Aleph, la déesse qui l'a créé. Aleph, déesse infinie au pouvoir infini, déesse de l'infini et créatrice du monde."]
+    },
+    {
+      "en":["Aleph had a necklace of infinite beauty made of an infinite number of pearls. Unfortunately this necklace broke and the pearls were scattered all over the world. Each pearl ended up on a different island."],
+      "fr":["Aleph avait un collier d'une beauté infinie constitué d'une infinité de perles. Malheureusement, ce collier s'est cassé et les perles ont été dispersées dans le monde entier. Chaque perle a atterri sur une île différente."]
+    },
+    {
+      "en":["The mission that you have been given is to travel the infinite number of islands that exist in the world to find the infinite number of pearls that made up the necklace."],
+      "fr":["La mission qui t'a été confiée est de parcourir le nombre infini d'îles que compte le monde pour trouver le nombre infini de perles qui constituaient le collier."]
+    }
+  ],
   "button":{
+    "next":{
+      "en":["Next"],
+      "fr":["Passer"]
+    },
+    "start":{
+      "en":["Start"],
+      "fr":["Commencer"]
+    },
     "cancel":{
       "en":["Cancel"],
       "fr":["Annuler"]
     },
     "ok":{
       "en":["Ok"],
-      "fr":["Dac"]
+      "fr":["D'accord"]
     },
     "take_pearl":{
       "en":["Take the pearl"],
@@ -43,23 +78,23 @@
   "cardinal":{
     "north" : {
       "en":["north"],
-      "fr":["nord"]
+      "fr":["au nord"]
     },
     "south" : {
       "en":["south"],
-      "fr":["sud"]
+      "fr":["au sud"]
     },
     "east" : {
       "en":["east"],
-      "fr":["est"]
+      "fr":["à l'est"]
     },
     "west" : {
       "en":["west"],
-      "fr":["ouest"]
+      "fr":["à l'ouest"]
     },
     "center" : {
       "en":["center"],
-      "fr":["centre"]
+      "fr":["au centre"]
     }
   },
   "deco":{
@@ -82,37 +117,119 @@
   },
   "pnj":{
     "casual":{
-      "en":["Hello, how are you today?"],
-      "fr":["Salut, comment ça va aujourd'hui ?"]
+      "en":[
+        "Hello, how are you today?",
+        "Yeah...",
+        "Hi!",
+        "Hello.",
+        "Good luck in your quest.",
+        "Hello, how are you today?",
+        "I was born here and have never left this island in my life.",
+        "When you have finished your mission come back to visit us!",
+        "It' s good on this island!",
+        "Fortunately, none of the pearls of the necklace fell into the water...",
+        "Glory to Aleph."
+      ],
+      "fr":[
+        "Salut, comment ça va aujourd'hui ?",
+        "Oui...",
+        "Bonjour.",
+        "Coucou.",
+        "Salut.",
+        "Bon courage pour ta quête.",
+        "Je suis né ici et je n'ai jamais quitté cette île de ma vie.",
+        "Quand tu aura fini ta mission reviens nous voir !",
+        "On est bien sur cette île !",
+        "Heureusement qu'aucune perle du collier n'est tombée dans l'eau...",
+        "Gloire à Aleph."
+      ]
     },
     "clue":{
       "near_this":{
-        "en":["There is a pearl right there, next to me."],
-        "fr":["Il y a une perle juste là, à côté de moi."]
+        "en":[
+          "There is a pearl right there, next to me.",
+          "Yes I saw a pearl near here.",
+          "Look, the pearl is right there at our feet."
+        ],
+        "fr":[
+          "Il y a une perle juste là, à côté de moi.",
+          "Oui, j'ai vu une perle tout près d'ici !",
+          "Regarde, la perle est juste là à nos pieds."
+        ]
       },
       "pnj_has_clue":{
-        "en":["%(detail)s found a pearl."],
-        "fr":["%(detail)s a trouvé une perle."]
+        "en":[
+          "%(detail)s found a pearl.",
+          "Looking for a pearl ? Go to %(detail)s.",
+          "You should go talk to %(detail)s.",
+          "%(detail)s will help you find the pearl."
+        ],
+        "fr":[
+          "%(detail)s a trouvé une perle.",
+          "Tu cherche une perle ? Va voir %(detail)s.",
+          "Tu devrai aller parler à %(detail)s.",
+          "%(detail)s va t'aider à trouver la perle."
+        ]
       },
       "near_pnj":{
-        "en":["The pearl is next to %(detail)s."],
-        "fr":["La perle est à côté de %(detail)s."]
+        "en":[
+          "The pearl is next to %(detail)s.",
+          "I saw the pearl on the ground, near %(detail)s.",
+          "The pearl is not far from %(detail)s."
+        ],
+        "fr":[
+          "La perle est à côté de %(detail)s.",
+          "J'ai vu la perle au sol, près de %(detail)s.",
+          "La pierre est par terre, pas loin de %(detail)s."
+        ]
       },
       "near_boat":{
-        "en":["The pearl is next to the boat."],
-        "fr":["La perle est à côté du bateau."]
+        "en":[
+          "The pearl is next to the boat.",
+          "A pearl? I think I saw one at the boat.",
+          "You should go look by the boat."
+        ],
+        "fr":[
+          "La perle est à côté du bateau.",
+          "Une perle ? je crois que j'en ai vu une au bateau.",
+          "Tu devrais aller voir vers le bateau."
+        ]
       },
       "near_water":{
-        "en":["The pearl is at the water's edge."],
-        "fr":["La perle est au bord de l'eau."]
+        "en":[
+          "The pearl is at the water's edge.",
+          "Yes there is a pearl on this island, near the water.",
+          "I saw the pearl by the water."
+        ],
+        "fr":[
+          "La perle est au bord de l'eau.",
+          "Oui il y a une perle sur cette île, proche de l'eau.",
+          "J'ai vu la perle à côté de l'eau."
+        ]
       },
       "near_deco":{
-        "en":["The pearl is next to %(detail)s."],
-        "fr":["La perle est à côté d'%(detail)s."]
+        "en":[
+          "The pearl is next to %(detail)s.",
+          "I saw the pearl near %(detail)s.",
+          "All I can tell you is that the pearl is close to %(detail)s."
+        ],
+        "fr":[
+          "La perle est à côté d'%(detail)s.",
+          "J'ai vu la perle proche d'%(detail)s.",
+          "Tout ce que je peux te dire, c'est que la perle est proche d'%(detail)s."
+        ]
       },
       "cardinal_direction":{
-        "en":["The pearl is in the %(detail)s of the island."],
-        "fr":["La perle est au %(detail)s de l'île."]
+        "en":[
+          "The pearl is in the %(detail)s of the island.",
+          "If there's a pearl on this island it's probably to the %(detail)s.",
+          "Did you look in the %(detail)s of the island?"
+        ],
+        "fr":[
+          "La perle est %(detail)s de l'île.",
+          "S'il y a une perle sur cette île c'est sûrement %(detail)s.",
+          "Tu as cherché %(detail)s de l'île ?"
+        ]
       }
     }
   }

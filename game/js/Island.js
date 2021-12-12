@@ -100,7 +100,7 @@ class Island {
       hsl.lightness = this.pot.gnorm(.5, .6);
 
       // FLAG
-      let flag = this.pot.irange(1,11);
+      let flag = this.pot.irange(1,12*5-1);
 
       // SIZE
       let size = Math.floor(this.pot.gnorm(8,40)/2)*2;
@@ -198,7 +198,7 @@ class Island {
             decorate += noise_octave(rx, ry, 2, 0.4)
             if(decorate > 1-element_density){
               element_count++;
-              let variation = Math.floor(this.pot.ngrad(0,9));
+              let variation = constrain(Math.floor(this.pot.ngrad(0,10)),0,7);
               return {
                 line:element.line,
                 type:element.type,

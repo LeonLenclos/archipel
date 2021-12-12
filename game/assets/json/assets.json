@@ -6,6 +6,10 @@
     "inventory"
   ],
   "png": [
+    "necklace_anim/0",
+    "necklace_anim/1",
+    "necklace_anim/2",
+    "corner",
     "landform",
     "flag",
     "poi",

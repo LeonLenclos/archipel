@@ -29,24 +29,8 @@ class MapInterface extends Interface {
     this.pearls_count.appendTo(this.container);
   }
 
-  update_content(){
-    this.map_canvas.set_cursor();
-
-    if(!this.interaction_popup.is_open){
-      let mouse_rel_x = this.mouse_x/window.innerWidth;
-      let mouse_rel_y = this.mouse_y/window.innerHeight;
-      let cursor_pos = this.map_canvas.tile_at(mouse_rel_x, mouse_rel_y);
-      if(this.mouse_is_down && game.player.path.length==0){
-        game.set_player_target(cursor_pos.x, cursor_pos.y);
-      }
-    else{
-      this.map_canvas.set_cursor(cursor_pos.x, cursor_pos.y);
-    }
-  }
-  let island_index = game.player.island_index;
-  if(this.cache.island_index != island_index){
+  update_island_name(){
     this.island_name.empty()
-    this.cache.island_index = island_index
     let map_data = game.get_player_island().map_data
     let flag = new FlagCanvas(map_data.flag, map_data.hsl);
     flag.draw();
@@ -55,10 +39,9 @@ class MapInterface extends Interface {
     .appendTo(this.island_name);
   }
 
-  let pearls_count = game.player.pearls_found.size;
-  if(this.cache.pearls_count != pearls_count){
+  update_pearl_count(){
     this.pearls_count.empty()
-    this.cache.pearls_count = pearls_count
+    let pearls_count = game.player.pearls_found.size;
     let template = game.t('gui', pearls_count>1?'pearls_count':'pearl_count');
     let pearls_outerHTML = $('<span/>').text(pearls_count)
     .addClass('pearls')
@@ -67,38 +50,47 @@ class MapInterface extends Interface {
     this.pearls_count.html(html)
   }
 
+  update_content(dt){
+    this.map_canvas.set_cursor();
+
+    let island_index = game.player.island_index;
+    if(this.cache.island_index != island_index){
+      this.cache.island_index = island_index
+      this.update_island_name()
+      this.map_canvas.map_cache = null;
+      this.map_canvas.bg_cache = null;
+    }
+
+    let pearls_count = game.player.pearls_found.size;
+    if(this.cache.pearls_count != pearls_count){
+      this.cache.pearls_count = pearls_count
+      this.update_pearl_count();
+    }
+
+    if(!this.interaction_popup.is_open){
+      let mouse_rel_x = this.mouse_x/window.innerWidth;
+      let mouse_rel_y = this.mouse_y/window.innerHeight;
+      let cursor_pos = this.map_canvas.tile_at(mouse_rel_x, mouse_rel_y);
+      if(this.mouse_is_down && game.player.path.length==0){
+        game.set_player_target(cursor_pos.x, cursor_pos.y);
+      }
+      else{
+        this.map_canvas.set_cursor(cursor_pos.x, cursor_pos.y);
+      }
+    }
 
 
-  this.map_canvas.draw();
-}
 
-on_resize(){
-  this.map_canvas.fit_to_screen();
-}
 
-on_ok(){
-  if (this.interaction_popup.is_open) this.interaction_popup.on_ok();
-}
+    this.map_canvas.draw();
+  }
 
-on_up(){
-  if (this.interaction_popup.is_open) this.interaction_popup.on_up();
-  else game.move_player(0, -1)
-}
+  on_resize(){
+    this.map_canvas.fit_to_screen();
+    this.map_canvas.bg_cache = null;
+  }
 
-on_down(){
-  if (this.interaction_popup.is_open) this.interaction_popup.on_down();
-  else game.move_player(0, 1)
-}
 
-on_left(){
-  if (this.interaction_popup.is_open) this.interaction_popup.on_left();
-  else game.move_player(-1, 0)
-}
-
-on_right(){
-  if (this.interaction_popup.is_open) this.interaction_popup.on_right();
-  else game.move_player(1, 0)
-}
 }
 
 
@@ -109,8 +101,8 @@ class MapCanvas extends Canvas {
   }
 
   set_cursor(x, y){
-      this.cursor_x = x;
-      this.cursor_y = y;
+    this.cursor_x = x;
+    this.cursor_y = y;
   }
 
   tile_at(x, y){
@@ -133,18 +125,54 @@ class MapCanvas extends Canvas {
       }
     }
   }
+
   render(ctx){
-    this.clear_bg(ctx);
-    this.offset_x = Math.floor(this.width/2 - game.player.x*TILE_SIZE);
-    this.offset_y = Math.floor(this.height/2 - game.player.y*TILE_SIZE);
+    this.offset_x = 0;
+    this.offset_y = 0;
     let map_data = game.get_map_data()
-    this.set_hsl(map_data.hsl);
-    this.render_landform(ctx, map_data.landform);
-    this.render_decoration(ctx, map_data.decoration);
+
+    if(!this.bg_cache){
+      this.bg_cache = document.createElement('canvas');
+      this.bg_cache.width = this.element.width();
+      this.bg_cache.height = this.element.height();
+      let cache_ctx = this.bg_cache.getContext('2d');
+      this.set_hsl(map_data.hsl);
+      this.clear_bg(cache_ctx);
+      this.filters(cache_ctx);
+    }
+
+    if(!this.map_cache){
+      this.map_cache = document.createElement('canvas');
+      this.map_cache.width = map_data.size*TILE_SIZE;
+      this.map_cache.height = map_data.size*TILE_SIZE;
+      let cache_ctx = this.map_cache.getContext('2d');
+      this.set_hsl(map_data.hsl);
+      this.render_landform(cache_ctx, map_data.landform);
+      this.render_decoration(cache_ctx, map_data.decoration);
+      this.filters(cache_ctx);
+    }
+
+    ctx.drawImage(this.bg_cache, 0, 0)
+    let calculated_offset_x = Math.floor(this.width/2 - game.player.x*TILE_SIZE);
+    let calculated_offset_y = Math.floor(this.height/2 - game.player.y*TILE_SIZE);
+    this.last_offset_x = this.last_offset_x || calculated_offset_x;
+    this.last_offset_y = this.last_offset_y || calculated_offset_y;
+    this.last_offset_x = lerp(this.last_offset_x, calculated_offset_x, 0.3)
+    this.last_offset_y = lerp(this.last_offset_y, calculated_offset_y, 0.3)
+    this.offset_x = Math.floor(this.last_offset_x)
+    this.offset_y = Math.floor(this.last_offset_y)
+    ctx.drawImage(this.map_cache, this.offset_x, this.offset_y)
     this.render_pois(ctx, map_data.pois);
     this.render_player(ctx, game.player);
+    this.render_corner(ctx);
   }
 
+  render_bg(ctx){
+    if (this.bg_cache) {
+    }
+    // ctx.drawImage(this.bg_cache, x, y);
+    let map_data = game.get_map_data()
+  }
 
   render_landform(ctx, landform){
     const is_ground = (x,y) => landform[constrain(x, 0, landform.length-1)][constrain(y, 0, landform[0].length-1)]
@@ -157,15 +185,15 @@ class MapCanvas extends Canvas {
     });
   }
 
-    render_pois(ctx, pois){
-      pois.forEach((poi) => {
-        let sprite = poi.sprite * 2;
-        if (poi.interacting) {
-          sprite += 1;
-        }
-        this.render_tile('poi', sprite, poi.x, poi.y, ctx);
-      });
-    }
+  render_pois(ctx, pois){
+    pois.forEach((poi) => {
+      let sprite = poi.sprite * 4;
+      if (poi.interacting) {
+        sprite += constrain(game.player.interacting_since, 1,3);
+      }
+      this.render_tile('poi', sprite, poi.x, poi.y, ctx);
+    });
+  }
 
   render_decoration(ctx, decoration){
     foreach_array2d(decoration, (deco, x, y)=>{
@@ -191,9 +219,17 @@ class MapCanvas extends Canvas {
     if (player.path.length>0){
       let last_step = player.path[player.path.length-1]
       this.render_tile('player', 1, last_step[0], last_step[1], ctx);
-    }else if(this.cursor_x&&this.cursor_y){
+    }
+    else if(this.cursor_x&&this.cursor_y){
       this.render_tile('player', 2, this.cursor_x, this.cursor_y, ctx);
     }
+    player.previous_pos.forEach((pos, i) => {
+      let other_pos = [player].concat(player.previous_pos.slice(i+1))
+      if (!other_pos.find((p)=>pos.x == p.x && pos.y == p.y)) {
+        this.render_tile('player', 3+i, pos.x, pos.y, ctx)
+      }
+    });
+
   }
 
   render_tile_rect(x, y, ctx){

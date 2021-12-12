@@ -21,7 +21,7 @@ class Interface {
         }
     }
 
-    update(){
-        this.update_content && this.update_content();
+    update(dt){
+        this.update_content && this.update_content(dt);
     }
 }

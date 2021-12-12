@@ -1,5 +1,6 @@
 class Song {
   constructor(seed){
+    if(OFFLINE)return;
     this.seed = seed;
     this.pot = Fdrandom.pot(this.seed);
 
@@ -134,25 +135,29 @@ class Song {
       }
     });
 
-    this.tone_sequence = new Tone.Sequence((time, step) => {
-      if (step.note != null){
-        this.synth.triggerAttackRelease(step.note, '4n', time);
+    this.notes_loop = new Tone.Loop((time) => {
+      if (notes[this.i] != null && !this.mute_notes){
+        this.synth.triggerAttackRelease(notes[this.i], '4n', time);
       }
-      if (step.voice != null){
-        this.synth_chords.triggerAttackRelease(step.voice, '2n', time);
+      if (this.chords[this.i] != null & !this.mute_chords){
+        this.synth_chords.triggerAttackRelease(this.chords[this.i], '2n', time);
       }
-    }, this.sequence)
+      this.i = (this.i + 1)%notes.length;
+    }, '8n');
 
   }
 
   // play the song
-  play(){
-    this.tone_sequence.start();
+  start(time){
+    this.i = 0;
+    this.notes_loop.start(time);
+    // this.voice_loop.start(time);
   }
 
   // stop the song
-  stop(){
-    this.tone_sequence.stop();
+  stop(time){
+    this.notes_loop.stop(time);
+    // this.voice_loop.stop(time);
   }
 
 }

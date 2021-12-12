@@ -67,11 +67,20 @@ class PopUp {
       button.element.addClass('connection')
       let flag = new FlagCanvas(option.flag, option.hsl);
       flag.draw();
-      let name = $('<div/>');
+      let infos = $('<div/>').addClass('island_infos');
+      let name = $('<div/>').addClass('island_name');
       name.text(option.txt);
+      let visited = $('<div/>');
+      if(option.visited){
+        if (option.pearl_found) visited.html(game.t("gui", "pearl_found"));
+        else visited.html(game.t("gui", "visited"));
+      }
+      else visited.html(game.t("gui", "not_visited"));
       flag.element.appendTo(button.element);
-      name.appendTo(button.element);
+      infos.appendTo(button.element)
       button.element.appendTo(this.element)
+      name.appendTo(infos);
+      visited.appendTo(infos);
       this.buttons.push(button);
     });
     let close_button = new Button(game.t('button', 'cancel'), ()=>this.close())
@@ -96,37 +105,6 @@ class PopUp {
   update_content(){
   }
 
-
-  move_selection(n){
-    this.selected = constrain(this.selected+n, 0, this.buttons.length-1);
-    this.update_selection();
-  }
-
-  update_selection(){
-    this.buttons.forEach((o, i)=>o.select(i == this.selected));
-  }
-
-  on_down(){
-    this.move_selection(+1);
-  }
-
-  on_up(){
-    this.move_selection(-1);
-  }
-
-  on_left(){
-    this.move_selection(-1);
-  }
-
-  on_down(){
-    this.move_selection(-1);
-  }
-
-  on_ok(){
-    let button = this.buttons[this.selected]
-    if(!button.disabled)
-    button.callback();
-  }
 }
 
 
@@ -138,15 +116,7 @@ class Button {
     .html(text)
     .attr("disabled",disabled);
     if(!this.disabled) {
-      this.element.click(()=>{
-        if(game.request_turn()) this.callback();
-      }
-    );
+      this.element.click(this.callback);
   }
-}
-
-select(selected){
-  if (selected) this.element.addClass('selected');
-  else this.element.removeClass('selected');
 }
 }

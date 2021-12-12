@@ -1,7 +1,7 @@
 * {
   font-family: sans-serif;
   font-weight: bold;
-  color:#444;
+  color:#222;
 
   box-sizing: border-box;
 }
@@ -17,7 +17,7 @@ html, body {
 
 
 body {
-  background: black;
+  background: #222;
 }
 
 
@@ -47,10 +47,12 @@ canvas {
 .dialog .txt,
 .button,
 #island_name,
-#pearls_count{
+#pearls_count,
+#intro_txt
+{
   background: none;
   border:15px solid transparent;
-  border-image: url("/game/assets/png/border.png") 15 fill repeat;
+  border-image: url("../assets/png/border.png") 15 fill repeat;
   margin:  5px;
 
 }
@@ -94,11 +96,14 @@ canvas {
   padding: 8px;
 }
 
-.button.connection div{
-  font-size: 24px;
+.button.connection .island_infos{
   width: 100%;
 }
 
+.button.connection .island_name{
+    font-size: 18px;
+  margin-bottom: 5px;
+}
 
 .button {
   height:45px;
@@ -144,6 +149,29 @@ canvas {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+/******** INTRO **********/
+#intro{
+  outline: 1px solid green;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#intro_canvas {
+   width:360px;
+  height: 240px;
+    margin:  5px;
+
+}
+
+#intro_txt{
+  font-style: italic;
+  text-align: justify;
+  width:500px;
 }
 
 /********** MAP ************/

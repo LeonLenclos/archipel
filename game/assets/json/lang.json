@@ -1,7 +1,16 @@
 {
   "phonemes":{
-    "vowels":["a", "e", "i", "o", "u", "ai", "au", "ei", "eu", "io", "ia", "ie", "ou", "oi"],
-    "consonants":["b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z", "bj", "bl", "br", "bs", "cf", "cj", "ch", "cl", "cn", "cp", "cr", "cs", "cc", "ct", "cz", "dj", "dh", "dl", "dr", "dv", "ff", "fk", "fl", "gh", "gr", "gn", "gw", "gz", "kh", "kr", "lr", "mn", "pr", "ph", "pl", "pm", "pn", "ps", "qr", "rh", "sh", "st", "sl", "sm", "sn", "vr", "vl", "wh"]
+    "vowels":[
+      "a", "e", "i", "o", "u",
+      "a", "e", "i", "o", "u",
+      "ai", "au", "ei", "eu", "io", "ia", "ie", "ou", "oi"
+    ],
+    "consonants":[
+      "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z",
+      "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z",
+      "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z",
+      "bj", "bl", "br", "bs", "cf", "cj", "ch", "cl", "cn", "cp", "cr", "cs", "cc", "ct", "cz", "dj", "dh", "dl", "dr", "dv", "ff", "fk", "fl", "gh", "gr", "gn", "gw", "gz", "kh", "kr", "lr", "mn", "pr", "ph", "pl", "pm", "pn", "ps", "qr", "rh", "sh", "st", "sl", "sm", "sn", "vr", "vl", "wh"
+    ]
   },
   "punctuation":[".",".",".","!","!!!","?","!?","..."]
 
